@@ -30,7 +30,7 @@
     </style>
   </head>
   <body>
-    <audio id="sound-ok" src="成功音.mp3" preload="auto"></audio>
+    <audio id="sound-success" src="success.mp3" preload="auto"></audio>
 
     <div class="container main-container">
       <div class="header-card">
@@ -114,9 +114,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-      // ==========================================
-      // 【重要】ここに【手順1】でデプロイした新しいGASのURLを貼り付けます！
-      // ==========================================
+      // あなたのGASのURL（設定済み）
       const GAS_URL = "https://script.google.com/macros/s/AKfycbw1kWKZbLopo4vr1XA4Gi952a-Y3Hlvj5nNiSGZP28DbqZGGDflBTw1KyJaKTc4OfKO/exec";
 
       function updateClock() {
@@ -210,6 +208,9 @@
       const btnCancel = document.getElementById("btn-cancel");
 
       function startScan(mode) {
+        // スマホの「音出しブロック」を解除するための準備
+        document.getElementById("sound-success").load();
+        
         currentMode = mode;
         statusInd.innerHTML = `<strong>【${mode}】</strong>QRをかざしてください`;
         statusInd.style.borderColor = mode === "登校" ? "#20c997" : "#fd7e14";
@@ -270,7 +271,11 @@
       }
 
       function onSuccess(result) {
-        document.getElementById("sound-ok").play();
+        // 成功した時だけ音を鳴らす！
+        if (result.success === true) {
+          document.getElementById("sound-success").play().catch(e => console.log("音声エラー:", e));
+        }
+
         msgAlert.className = result.success ? "alert alert-success alert-custom" : "alert alert-danger alert-custom";
         msgAlert.innerText = result.message;
         setTimeout(resetSystem, 4000);
