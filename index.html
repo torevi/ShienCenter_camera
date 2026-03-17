@@ -30,6 +30,7 @@
     </style>
   </head>
   <body>
+    <audio id="sound-ok" src="ok.mp3" preload="auto"></audio>
 
     <div class="container main-container">
       <div class="header-card">
@@ -269,6 +270,7 @@
       }
 
       function onSuccess(result) {
+        document.getElementById("sound-ok").play();
         msgAlert.className = result.success ? "alert alert-success alert-custom" : "alert alert-danger alert-custom";
         msgAlert.innerText = result.message;
         setTimeout(resetSystem, 4000);
